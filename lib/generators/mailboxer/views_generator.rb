@@ -4,6 +4,6 @@ class Mailboxer::ViewsGenerator < Rails::Generators::Base
   desc "Copy Mailboxer views into your app"
   def copy_views
     directory('message_mailer', 'app/views/message_mailer')
-    directory('notification_mailer', 'app/views/notification_mailer')
+    directory('motification_mailer', 'app/views/motification_mailer')
   end
 end

@@ -9,16 +9,16 @@ describe Mailboxer::Message do
     @receipt2 = @entity2.reply_to_all(@receipt1,"Reply body 1")
     @receipt3 = @entity1.reply_to_all(@receipt2,"Reply body 2")
     @receipt4 = @entity2.reply_to_all(@receipt3,"Reply body 3")
-    @message1 = @receipt1.notification
-    @message4 = @receipt4.notification
+    @message1 = @receipt1.motification
+    @message4 = @receipt4.motification
     @conversation = @message1.conversation
   end  
   
   it "should have right recipients" do
-  	@receipt1.notification.recipients.count.should==2
-  	@receipt2.notification.recipients.count.should==2
-  	@receipt3.notification.recipients.count.should==2
-  	@receipt4.notification.recipients.count.should==2      
+  	@receipt1.motification.recipients.count.should==2
+  	@receipt2.motification.recipients.count.should==2
+  	@receipt3.motification.recipients.count.should==2
+  	@receipt4.motification.recipients.count.should==2      
   end
 
   it "should be able to be marked as deleted" do

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>You have a new motification: <%= @motification.subject.html_safe? ? @motification.subject : strip_tags(@motification.subject) %></h1>
+    <p>
+      You have received a new motification:
+    </p>
+    <blockquote>
+      <p>
+        <%= raw @motification.body %>
+      </p>
+    </blockquote>
+    <p>
+      Visit <%= link_to root_url,root_url %> and go to your motifications for more info.
+    </p>
+  </body>
+</html>

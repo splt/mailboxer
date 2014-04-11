@@ -2,24 +2,24 @@ class Mailboxer::Receipt < ActiveRecord::Base
   self.table_name = :mailboxer_receipts
   attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
-  belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true
+  belongs_to :motification, :class_name => "Mailboxer::Motification", :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
-  belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id"
+  belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "motification_id"
 
   validates_presence_of :receiver
 
   scope :recipient, lambda { |recipient|
     where(:receiver_id => recipient.id,:receiver_type => recipient.class.base_class.to_s)
   }
-  #Notifications Scope checks type to be nil, not Notification because of STI behaviour
+  #Motifications Scope checks type to be nil, not Motification because of STI behaviour
   #with the primary class (no type is saved)
-  scope :notifications_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => nil) }
-  scope :messages_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => Mailboxer::Message.to_s) }
-  scope :notification, lambda { |notification|
-    where(:notification_id => notification.id)
+  scope :motifications_receipts, lambda { joins(:motification).where('mailboxer_motifications.type' => nil) }
+  scope :messages_receipts, lambda { joins(:motification).where('mailboxer_motifications.type' => Mailboxer::Message.to_s) }
+  scope :motification, lambda { |motification|
+    where(:motification_id => motification.id)
   }
   scope :conversation, lambda { |conversation|
-    joins(:message).where('mailboxer_notifications.conversation_id' => conversation.id)
+    joins(:message).where('mailboxer_motifications.conversation_id' => conversation.id)
   }
   scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
@@ -133,17 +133,17 @@ class Mailboxer::Receipt < ActiveRecord::Base
     update_attributes(:mailbox_type => :sentbox, :trashed => false)
   end
 
-  #Returns the conversation associated to the receipt if the notification is a Message
+  #Returns the conversation associated to the receipt if the motification is a Message
   def conversation
     message.conversation if message.is_a? Mailboxer::Message
   end
 
-  #Returns if the participant have read the Notification
+  #Returns if the participant have read the Motification
   def is_unread?
     !self.is_read
   end
 
-  #Returns if the participant have trashed the Notification
+  #Returns if the participant have trashed the Motification
   def is_trashed?
     self.trashed
   end
@@ -153,9 +153,9 @@ class Mailboxer::Receipt < ActiveRecord::Base
   #Removes the duplicate error about not present subject from Conversation if it has been already
   #raised by Message
   def remove_duplicate_errors
-    if self.errors["mailboxer_notification.conversation.subject"].present? and self.errors["mailboxer_notification.subject"].present?
-      self.errors["mailboxer_notification.conversation.subject"].each do |msg|
-        self.errors["mailboxer_notification.conversation.subject"].delete(msg)
+    if self.errors["mailboxer_motification.conversation.subject"].present? and self.errors["mailboxer_motification.subject"].present?
+      self.errors["mailboxer_motification.conversation.subject"].each do |msg|
+        self.errors["mailboxer_motification.conversation.subject"].delete(msg)
       end
     end
   end

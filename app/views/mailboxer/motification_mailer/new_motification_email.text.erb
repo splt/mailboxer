@@ -1,0 +1,10 @@
+You have a new motification: <%= @motification.subject.html_safe? ? @motification.subject : strip_tags(@motification.subject) %>
+===============================================
+ 
+You have received a new motification:
+
+-----------------------------------------------
+<%= @motification.body.html_safe? ? @motification.body : strip_tags(@motification.body) %>
+-----------------------------------------------
+
+Visit <%= root_url %> and go to your motifications for more info.

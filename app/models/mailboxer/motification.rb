@@ -1,5 +1,5 @@
-class Mailboxer::Notification < ActiveRecord::Base
-  self.table_name = :mailboxer_notifications
+class Mailboxer::Motification < ActiveRecord::Base
+  self.table_name = :mailboxer_motifications
 
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?
@@ -26,19 +26,19 @@ class Mailboxer::Notification < ActiveRecord::Base
     joins(:receipts).where('mailboxer_receipts.is_read' => false)
   }
   scope :global, lambda { where(:global => true) }
-  scope :expired, lambda { where("mailboxer_notifications.expires < ?", Time.now) }
+  scope :expired, lambda { where("mailboxer_motifications.expires < ?", Time.now) }
   scope :unexpired, lambda {
-    where("mailboxer_notifications.expires is NULL OR mailboxer_notifications.expires > ?", Time.now)
+    where("mailboxer_motifications.expires is NULL OR mailboxer_motifications.expires > ?", Time.now)
   }
 
   class << self
-    #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
-      notification = Mailboxer::Notification.new({:body => body, :subject => subject})
-      notification.recipients        = Array(recipients).uniq
-      notification.notified_object   = obj               if obj.present?
-      notification.notification_code = notification_code if notification_code.present?
-      notification.deliver sanitize_text, send_mail
+    #Sends a Motification to all the recipients
+    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,motification_code=nil,send_mail=true)
+      motification = Mailboxer::Motification.new({:body => body, :subject => subject})
+      motification.recipients        = Array(recipients).uniq
+      motification.notified_object   = obj               if obj.present?
+      motification.motification_code = motification_code if motification_code.present?
+      motification.deliver sanitize_text, send_mail
     end
 
     #Takes a +Receipt+ or an +Array+ of them and returns +true+ if the delivery was
@@ -74,8 +74,8 @@ class Mailboxer::Notification < ActiveRecord::Base
     end
   end
 
-  #Delivers a Notification. USE NOT RECOMENDED.
-  #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
+  #Delivers a Motification. USE NOT RECOMENDED.
+  #Use Mailboxer::Models::Message.notify and Motification.notify_all instead.
   def deliver(should_clean = true, send_mail = true)
     clean if should_clean
     temp_receipts = Array.new
@@ -95,7 +95,7 @@ class Mailboxer::Notification < ActiveRecord::Base
     temp_receipts.first
   end
 
-  #Returns the recipients of the Notification
+  #Returns the recipients of the Motification
   def recipients
     if @recipients.blank?
       recipients_array = Array.new
@@ -111,7 +111,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns the receipt for the participant
   def receipt_for(participant)
-    Mailboxer::Receipt.notification(self).recipient(participant)
+    Mailboxer::Receipt.motification(self).recipient(participant)
   end
 
   #Returns the receipt for the participant. Alias for receipt_for(participant)
@@ -119,7 +119,7 @@ class Mailboxer::Notification < ActiveRecord::Base
     receipt_for(participant)
   end
 
-  #Returns if the participant have read the Notification
+  #Returns if the participant have read the Motification
   def is_unread?(participant)
     return false if participant.nil?
     !self.receipt_for(participant).first.is_read
@@ -129,43 +129,43 @@ class Mailboxer::Notification < ActiveRecord::Base
     !self.is_unread?(participant)
   end
 
-  #Returns if the participant have trashed the Notification
+  #Returns if the participant have trashed the Motification
   def is_trashed?(participant)
     return false if participant.nil?
     self.receipt_for(participant).first.trashed
   end
 
-  #Returns if the participant have deleted the Notification
+  #Returns if the participant have deleted the Motification
   def is_deleted?(participant)
     return false if participant.nil?
     return self.receipt_for(participant).first.deleted
   end
 
-  #Mark the notification as read
+  #Mark the motification as read
   def mark_as_read(participant)
     return if participant.nil?
     self.receipt_for(participant).mark_as_read
   end
 
-  #Mark the notification as unread
+  #Mark the motification as unread
   def mark_as_unread(participant)
     return if participant.nil?
     self.receipt_for(participant).mark_as_unread
   end
 
-  #Move the notification to the trash
+  #Move the motification to the trash
   def move_to_trash(participant)
     return if participant.nil?
     self.receipt_for(participant).move_to_trash
   end
 
-  #Takes the notification out of the trash
+  #Takes the motification out of the trash
   def untrash(participant)
     return if participant.nil?
     self.receipt_for(participant).untrash
   end
 
-  #Mark the notification as deleted for one of the participant
+  #Mark the motification as deleted for one of the participant
   def mark_as_deleted(participant)
     return if participant.nil?
     return self.receipt_for(participant).mark_as_deleted
@@ -179,7 +179,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns notified_object. DEPRECATED
   def object
-    warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Notification"
+    warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Motification"
     notified_object
   end
 
@@ -191,7 +191,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   def build_receipt(receiver, mailbox_type, is_read = false)
     Mailboxer::Receipt.new.tap do |receipt|
-      receipt.notification = self
+      receipt.motification = self
       receipt.is_read = is_read
       receipt.receiver = receiver
       receipt.mailbox_type = mailbox_type

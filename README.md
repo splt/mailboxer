@@ -8,8 +8,8 @@ potent messaging gem.
 After looking for a good gem to use we noticed the lack of messaging gems
 and functionality in them. Mailboxer tries to fill this void delivering
 a powerful and flexible message system. It supports the use of
-conversations with two or more participants, sending notifications to
-recipients (intended to be used as system notifications “Your picture has
+conversations with two or more participants, sending motifications to
+recipients (intended to be used as system motifications “Your picture has
 new comments”, “John Doe has updated his document”, etc.), and emailing the
 messageable model (if configured to do so). It has a complete implementation 
 of a `Mailbox` object for each messageable with `inbox`, `sentbox` and
@@ -60,23 +60,23 @@ $ rake db:migrate
 
 ### Emails
 
-We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings.
+We are now adding support for sending emails when a Motification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings.
 
 ```ruby
 Mailboxer.setup do |config|
-  #Enables or disables email sending for Notifications and Messages
+  #Enables or disables email sending for Motifications and Messages
   config.uses_emails = true  
-  #Configures the default `from` address for the email sent for Messages and Notifications of Mailboxer
+  #Configures the default `from` address for the email sent for Messages and Motifications of Mailboxer
   config.default_from = "no-reply@dit.upm.es"
   ...
 end
 ```
 
-You can change the way in which emails are delivered by specifying a custom implementation of notification and message mailers
+You can change the way in which emails are delivered by specifying a custom implementation of motification and message mailers
 
 ```ruby
 Mailboxer.setup do |config|
-  config.notification_mailer = CustomNotificationMailer
+  config.motification_mailer = CustomMotificationMailer
   config.message_mailer = CustomMessageMailer
   ...
 end
@@ -94,7 +94,7 @@ end
 ```
 
 ```ruby
-#Returning the email address of the model if an email should be sent for this object (Message or Notification).
+#Returning the email address of the model if an email should be sent for this object (Message or Motification).
 #If no mail has to be sent, return nil.
 def mailboxer_email(object)
   #Check if an email should be sent for that object
@@ -120,11 +120,11 @@ end
 You may change whatever you want or need. For example:
 
 ```ruby
-config.email_method = :notifications_email
+config.email_method = :motifications_email
 config.name_method = :display_name
 ```
 
-Will use the method `notification_email(object)` instead of `mailboxer_email(object)` and `display_name` for `name`.
+Will use the method `motification_email(object)` instead of `mailboxer_email(object)` and `display_name` for `name`.
 
 Using default or custom method names, if your model doesn't implement them, Mailboxer will use dummy methods so as to notify you of missing methods rather than crashing.
 
@@ -212,7 +212,7 @@ conversation.mark_as_deleted participant
 #Object can be:
   #* A Receipt
   #* A Conversation
-  #* A Notification
+  #* A Motification
   #* A Message
   #* An array with any of them
 alfa.mark_as_deleted conversation

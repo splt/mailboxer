@@ -5,7 +5,7 @@ module Mailboxer
 
       module ActiveRecordExtension
         #Converts the model into messageable allowing it to interchange messages and
-        #receive notifications
+        #receive motifications
         def acts_as_messageable
           include Messageable
         end
@@ -34,7 +34,7 @@ module Mailboxer
       end
 
       unless defined?(Mailboxer.email_method)
-        #Returning the email address of the model if an email should be sent for this object (Message or Notification).
+        #Returning the email address of the model if an email should be sent for this object (Message or Motification).
         #If no mail has to be sent, return nil.
         define_method Mailboxer.email_method do |object|
           begin
@@ -52,9 +52,9 @@ module Mailboxer
         @mailbox
       end
 
-      #Sends a notification to the messageable
-      def notify(subject,body,obj = nil,sanitize_text=true,notification_code=nil,send_mail=true)
-        Mailboxer::Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail)
+      #Sends a motification to the messageable
+      def notify(subject,body,obj = nil,sanitize_text=true,motification_code=nil,send_mail=true)
+        Mailboxer::Motification.notify_all([self],subject,body,obj,sanitize_text,motification_code,send_mail)
       end
 
       #Sends a messages, starting a new conversation, with the messageable
@@ -111,14 +111,14 @@ module Mailboxer
       #Object can be:
       #* A Receipt
       #* A Message
-      #* A Notification
+      #* A Motification
       #* A Conversation
       #* An array with any of them
       def mark_as_read(obj)
         case obj
         when Mailboxer::Receipt
           obj.mark_as_read if obj.receiver == self
-        when Mailboxer::Message, Mailboxer::Notification
+        when Mailboxer::Message, Mailboxer::Motification
           obj.mark_as_read(self)
         when Mailboxer::Conversation
           obj.mark_as_read(self)
@@ -132,14 +132,14 @@ module Mailboxer
       #Object can be:
       #* A Receipt
       #* A Message
-      #* A Notification
+      #* A Motification
       #* A Conversation
       #* An array with any of them
       def mark_as_unread(obj)
         case obj
         when Mailboxer::Receipt
           obj.mark_as_unread if obj.receiver == self
-        when Mailboxer::Message, Mailboxer::Notification
+        when Mailboxer::Message, Mailboxer::Motification
           obj.mark_as_unread(self)
         when Mailboxer::Conversation
           obj.mark_as_unread(self)
@@ -152,7 +152,7 @@ module Mailboxer
       #
       #Object can be:
       #* A Receipt
-      #* A Notification
+      #* A Motification
       #* A Message
       #* A Conversation
       #* An array with any of them
@@ -160,7 +160,7 @@ module Mailboxer
         case obj
           when Receipt
             return obj.mark_as_deleted if obj.receiver == self
-          when Message, Notification
+          when Message, Motification
             obj.mark_as_deleted(self)
           when Conversation
             obj.mark_as_deleted(self)
@@ -176,14 +176,14 @@ module Mailboxer
       #Object can be:
       #* A Receipt
       #* A Message
-      #* A Notification
+      #* A Motification
       #* A Conversation
       #* An array with any of them
       def trash(obj)
         case obj
         when Mailboxer::Receipt
           obj.move_to_trash if obj.receiver == self
-        when Mailboxer::Message, Mailboxer::Notification
+        when Mailboxer::Message, Mailboxer::Motification
           obj.move_to_trash(self)
         when Mailboxer::Conversation
           obj.move_to_trash(self)
@@ -197,14 +197,14 @@ module Mailboxer
       #Object can be:
       #* A Receipt
       #* A Message
-      #* A Notification
+      #* A Motification
       #* A Conversation
       #* An array with any of them
       def untrash(obj)
         case obj
         when Mailboxer::Receipt
           obj.untrash if obj.receiver == self
-        when Mailboxer::Message, Mailboxer::Notification
+        when Mailboxer::Message, Mailboxer::Motification
           obj.untrash(self)
         when Mailboxer::Conversation
           obj.untrash(self)

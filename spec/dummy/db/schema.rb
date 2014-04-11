@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
     t.datetime "updated_at",                 :null => false
   end
 
-  create_table "mailboxer_notifications", :force => true do |t|
+  create_table "mailboxer_motifications", :force => true do |t|
     t.string   "type"
     t.text     "body"
     t.string   "subject",              :default => ""
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
     t.string   "sender_type"
     t.integer  "notified_object_id"
     t.string   "notified_object_type"
-    t.string   "notification_code"
+    t.string   "motification_code"
     t.integer  "conversation_id"
     t.boolean  "draft",                :default => false
     t.string   "attachment"
@@ -57,12 +57,12 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
     t.datetime "expires"
   end
 
-  add_index "mailboxer_notifications", ["conversation_id"], :name => "index_mailboxer_notifications_on_conversation_id"
+  add_index "mailboxer_motifications", ["conversation_id"], :name => "index_mailboxer_motifications_on_conversation_id"
 
   create_table "mailboxer_receipts", :force => true do |t|
     t.integer  "receiver_id"
     t.string   "receiver_type"
-    t.integer  "notification_id",                                  :null => false
+    t.integer  "motification_id",                                  :null => false
     t.boolean  "is_read",                       :default => false
     t.boolean  "trashed",                       :default => false
     t.boolean  "deleted",                       :default => false
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
     t.datetime "updated_at",                                       :null => false
   end
 
-  add_index "mailboxer_receipts", ["notification_id"], :name => "index_mailboxer_receipts_on_notification_id"
+  add_index "mailboxer_receipts", ["motification_id"], :name => "index_mailboxer_receipts_on_motification_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"

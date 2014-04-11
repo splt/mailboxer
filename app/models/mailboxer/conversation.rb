@@ -14,7 +14,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   scope :participant, lambda {|participant|
     select('mailboxer_conversations.*').
-      where('mailboxer_notifications.type'=> Mailboxer::Message.name).
+      where('mailboxer_motifications.type'=> Mailboxer::Message.name).
       order("mailboxer_conversations.updated_at DESC").
       joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
   }
@@ -121,7 +121,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 		messages = self.messages
 		messages.each do |message|
 		  receipt = Mailboxer::Receipt.new
-		  receipt.notification = message
+		  receipt.motification = message
 		  receipt.is_read = false
 		  receipt.receiver = participant
 		  receipt.mailbox_type = 'inbox'

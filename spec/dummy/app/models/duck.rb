@@ -4,7 +4,7 @@ class Duck < ActiveRecord::Base
     case object
     when Mailboxer::Message
       return nil
-    when Mailboxer::Notification
+    when Mailboxer::Motification
       return email
     end
   end

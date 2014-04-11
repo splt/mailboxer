@@ -7,10 +7,10 @@ class Mailboxer::Mailbox
     @messageable = messageable
   end
 
-  #Returns the notifications for the messageable
-  def notifications(options = {})
-    #:type => nil is a hack not to give Messages as Notifications
-    notifs = Mailboxer::Notification.recipient(@messageable).where(:type => nil).order("mailboxer_notifications.created_at DESC")
+  #Returns the motifications for the messageable
+  def motifications(options = {})
+    #:type => nil is a hack not to give Messages as Motifications
+    notifs = Mailboxer::Motification.recipient(@messageable).where(:type => nil).order("mailboxer_motifications.created_at DESC")
     if (options[:read].present? and options[:read]==false) or (options[:unread].present? and options[:unread]==true)
       notifs = notifs.unread
     end
@@ -77,7 +77,7 @@ class Mailboxer::Mailbox
     self.conversations(options)
   end
 
-  #Returns all the receipts of messageable, from Messages and Notifications
+  #Returns all the receipts of messageable, from Messages and Motifications
   def receipts(options = {})
     Mailboxer::Receipt.where(options).recipient(@messageable)
   end
@@ -107,13 +107,13 @@ class Mailboxer::Mailbox
   #
   #Object can be:
   #* A Message
-  #* A Notification
+  #* A Motification
   #* A Conversation
   #
   #If object isn't one of the above, a nil will be returned
   def receipts_for(object)
     case object
-    when Mailboxer::Message, Mailboxer::Notification
+    when Mailboxer::Message, Mailboxer::Motification
       object.receipt_for(@messageable)
     when Mailboxer::Conversation
       object.receipts_for(@messageable)

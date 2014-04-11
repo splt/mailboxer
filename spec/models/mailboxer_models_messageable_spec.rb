@@ -159,72 +159,72 @@ describe "Mailboxer::Models::Messageable through User" do
 
 
 
-  it "should be able to unread an owned Notification (mark as unread)" do
+  it "should be able to unread an owned Motification (mark as unread)" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.is_read.should==false
-    @entity1.mark_as_read(@notification)
-    @entity1.mark_as_unread(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==false
+    @entity1.mark_as_read(@motification)
+    @entity1.mark_as_unread(@motification)
+    @motification.receipt_for(@entity1).first.is_read.should==false
   end
 
-  it "should be able to read an owned Notification (mark as read)" do
+  it "should be able to read an owned Motification (mark as read)" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.is_read.should==false
-    @entity1.mark_as_read(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==true
+    @entity1.mark_as_read(@motification)
+    @motification.receipt_for(@entity1).first.is_read.should==true
   end
 
-  it "should not be able to unread a not owned Notification (mark as unread)" do
+  it "should not be able to unread a not owned Motification (mark as unread)" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.is_read.should==false
-    @entity1.mark_as_read(@notification)
-    @entity2.mark_as_unread(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==true
+    @entity1.mark_as_read(@motification)
+    @entity2.mark_as_unread(@motification)
+    @motification.receipt_for(@entity1).first.is_read.should==true
   end
 
-  it "should not be able to read a not owned Notification (mark as read)" do
+  it "should not be able to read a not owned Motification (mark as read)" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.is_read.should==false
-    @entity2.mark_as_read(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==false
+    @entity2.mark_as_read(@motification)
+    @motification.receipt_for(@entity1).first.is_read.should==false
   end
 
-  it "should be able to trash an owned Notification" do
+  it "should be able to trash an owned Motification" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.trashed.should==false
-    @entity1.trash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==true
+    @entity1.trash(@motification)
+    @motification.receipt_for(@entity1).first.trashed.should==true
   end
 
-  it "should be able to untrash an owned Notification" do
+  it "should be able to untrash an owned Motification" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.trashed.should==false
-    @entity1.trash(@notification)
-    @entity1.untrash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==false
+    @entity1.trash(@motification)
+    @entity1.untrash(@motification)
+    @motification.receipt_for(@entity1).first.trashed.should==false
   end
 
-  it "should not be able to trash a not owned Notification" do
+  it "should not be able to trash a not owned Motification" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.trashed.should==false
-    @entity2.trash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==false
+    @entity2.trash(@motification)
+    @motification.receipt_for(@entity1).first.trashed.should==false
   end
 
-  it "should not be able to untrash a not owned Notification" do
+  it "should not be able to untrash a not owned Motification" do
     @receipt = @entity1.notify("Subject","Body")
-    @notification = @receipt.notification
+    @motification = @receipt.motification
     @receipt.trashed.should==false
-    @entity1.trash(@notification)
-    @entity2.untrash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==true
+    @entity1.trash(@motification)
+    @entity2.untrash(@motification)
+    @motification.receipt_for(@entity1).first.trashed.should==true
   end
 
 

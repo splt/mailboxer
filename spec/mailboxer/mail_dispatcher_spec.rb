@@ -4,7 +4,7 @@ describe Mailboxer::MailDispatcher do
 
   subject(:instance) { described_class.new(mailable, recipients) }
 
-  let(:mailable)   { Mailboxer::Notification.new }
+  let(:mailable)   { Mailboxer::Motification.new }
   let(:recipient1) { double 'recipient1', mailboxer_email: ''  }
   let(:recipient2) { double 'recipient2', mailboxer_email: 'foo@bar.com'  }
   let(:recipients) { [ recipient1, recipient2 ] }
@@ -69,19 +69,19 @@ describe Mailboxer::MailDispatcher do
     let(:recipients) { [] }
 
     context "mailable is a Message" do
-      let(:mailable) { Mailboxer::Notification.new }
+      let(:mailable) { Mailboxer::Motification.new }
 
-      its(:mailer) { should be Mailboxer::NotificationMailer }
+      its(:mailer) { should be Mailboxer::MotificationMailer }
 
       context "with custom mailer" do
-        before { Mailboxer.notification_mailer = 'foo' }
-        after  { Mailboxer.notification_mailer = nil   }
+        before { Mailboxer.motification_mailer = 'foo' }
+        after  { Mailboxer.motification_mailer = nil   }
 
         its(:mailer) { should eq 'foo' }
       end
     end
 
-    context "mailable is a Notification" do
+    context "mailable is a Motification" do
       let(:mailable) { Mailboxer::Message.new }
       its(:mailer) { should be Mailboxer::MessageMailer }
 

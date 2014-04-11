@@ -9,7 +9,7 @@ describe Mailboxer::Receipt do
   end
   
   it "should belong to a message" do
-    assert @mail1.notification
+    assert @mail1.motification
   end
   
   it "should belong to a conversation" do
