@@ -1,4 +1,7 @@
 # Mailboxer [![Build Status](https://travis-ci.org/mailboxer/mailboxer.svg?branch=master)](https://travis-ci.org/mailboxer/mailboxer) [![Gem Version](https://badge.fury.io/rb/mailboxer.png)](http://badge.fury.io/rb/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
+Forcard Version was created to change notifications to motifications
+==========
+
 
 This project is based on the need for a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
@@ -11,7 +14,7 @@ a powerful and flexible message system. It supports the use of
 conversations with two or more participants, sending motifications to
 recipients (intended to be used as system motifications “Your picture has
 new comments”, “John Doe has updated his document”, etc.), and emailing the
-messageable model (if configured to do so). It has a complete implementation 
+messageable model (if configured to do so). It has a complete implementation
 of a `Mailbox` object for each messageable with `inbox`, `sentbox` and
 `trash`.
 
@@ -228,12 +231,12 @@ conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
 
 #Paginating received conversations using :page parameter and 9 per page
 conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
-  
+
 #Paginating sent conversations using :page parameter and 9 per page
 conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
 
 #Paginating trashed conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.trash.page(params[:page]).per(9) 
+conversations = alfa.mailbox.trash.page(params[:page]).per(9)
 ```
 
 ### How can I read the messages of a conversation?
