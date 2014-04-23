@@ -23,7 +23,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
   }
   scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
-  scope :trash, lambda { where(:trashed => true, :deleted => false) }
+  scope :trash, lambda { where(:mailbox_type => "trash", :trashed => true, :deleted => false) }
   scope :not_trash, lambda { where(:trashed => false) }
   scope :deleted, lambda { where(:deleted => true) }
   scope :not_deleted, lambda { where(:deleted => false) }
@@ -44,12 +44,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
 
     #Marks all the receipts from the relation as trashed
     def move_to_trash(options={})
-      update_receipts({:trashed => true, :mailbox_type => "trash"}, options)
+      update_receipts({:trashed => true, :mailbox_type => :trash}, options)
     end
 
     #Marks all the receipts from the relation as not trashed
     def untrash(options={})
-      update_receipts({:trashed => false, :mailbox_type => "inbox"}, options)
+      update_receipts({:trashed => false, :mailbox_type => :inbox}, options)
     end
 
     #Marks the receipt as deleted
@@ -115,12 +115,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
 
   #Marks the receipt as trashed
   def move_to_trash
-    update_attributes(:trashed => true)
+    update_attributes(:mailbox_type => :trash, :trashed => true)
   end
 
   #Marks the receipt as not trashed
   def untrash
-    update_attributes(:trashed => false)
+    update_attributes(:mailbox_type => :inbox, :trashed => false)
   end
 
   #Moves the receipt to inbox
