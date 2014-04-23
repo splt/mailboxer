@@ -44,12 +44,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
 
     #Marks all the receipts from the relation as trashed
     def move_to_trash(options={})
-      update_receipts({:trashed => true}, options)
+      update_receipts({:trashed => true, :mailbox_type => "trash"}, options)
     end
 
     #Marks all the receipts from the relation as not trashed
     def untrash(options={})
-      update_receipts({:trashed => false}, options)
+      update_receipts({:trashed => false, :mailbox_type => "inbox"}, options)
     end
 
     #Marks the receipt as deleted
