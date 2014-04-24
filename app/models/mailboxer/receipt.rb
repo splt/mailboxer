@@ -27,7 +27,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
   scope :not_trash, lambda { where(:trashed => false) }
   scope :deleted, lambda { where(:deleted => true) }
   scope :not_deleted, lambda { where(:deleted => false) }
-  scope :is_read, lambda { where(:is_read => "true") }
+  scope :is_read, lambda { where(:is_read => "true" ) }
   scope :is_unread, lambda { where(:is_read => "false") }
 
   after_validation :remove_duplicate_errors
