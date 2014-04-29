@@ -168,10 +168,13 @@ class Mailboxer::Receipt < ActiveRecord::Base
       text :body do
         message.body if message
       end
-      text :participants, :boost => 10 do
-        conversation.participants.map(&:name)
-      end
+      text :search_participants, :boost => 10
+      
       integer :receiver_id
+    end
+
+    def search_participants
+      conversation.participants.map(&:name)
     end
   end
 end
