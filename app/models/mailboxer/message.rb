@@ -13,12 +13,12 @@ class Mailboxer::Message < Mailboxer::Motification
 
   mount_uploader :attachment, AttachmentUploader
 
-  searchable do
-    text :subject, :body
-    text :participants do
-      conversation.participants.map(&:name), :boost => 5
-    end
-  end
+  # searchable do
+  #   text :subject, :body
+  #   text :participants do
+  #     conversation.participants.map(&:name), :boost => 5
+  #   end
+  # end
 
 
   class << self
