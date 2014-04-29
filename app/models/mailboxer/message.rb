@@ -13,6 +13,10 @@ class Mailboxer::Message < Mailboxer::Motification
 
   mount_uploader :attachment, AttachmentUploader
 
+  # searchable do
+  #   text :name
+  # end
+
   class << self
     #Sets the on deliver callback method.
     def on_deliver(callback_method)
