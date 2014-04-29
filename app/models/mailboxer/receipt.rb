@@ -168,8 +168,8 @@ class Mailboxer::Receipt < ActiveRecord::Base
       text :body do
         message.body if message
       end
-      text :search_participants, :boost => 10
-      
+      # text :search_participants, :boost => 10
+
       integer :receiver_id
     end
 
