@@ -168,7 +168,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
       text :body do
         message.body if message
       end
+      text :search_participants, :boost => 10 do
+        conversation.participants.map(&:name)
+      end
+
       integer :receiver_id
+      string :mailbox_type
     end
   end
 end
