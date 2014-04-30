@@ -173,7 +173,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
       end
 
       integer :receiver_id
+      string :mailbox_type
     end
-
   end
 end
